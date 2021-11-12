@@ -27,7 +27,7 @@ module.exports.index = async (req, res) => {
 
 module.exports.create = async (req, res) => {
     try {
-        if (!(await access.check_rule('users_create', req.user.user_id))) {
+        if (!(await access.check_rule('users_add', req.user.user_id))) {
             res.status(403).send({ message: 'Ruxsat yo\'q' })
         }
         const { full_name, username, password } = req.body
@@ -83,15 +83,6 @@ module.exports.update = async (req, res) => {
     } catch (error) {
         res.send(error)
     }
-}
-
-userUpdateValidator = (fields) => {
-    const validatorSchema = Joi.object({
-        full_name: Joi.string().required(),
-        username: Joi.string().required(),
-    })
-
-    return validatorSchema.validate(fields);
 }
 
 module.exports.change_active = async (req, res) => {
