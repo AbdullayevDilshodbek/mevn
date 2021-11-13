@@ -81,7 +81,7 @@ module.exports.update = async (req, res) => {
             message: "Foydalanuvchi ma'lumotlari yangilandi"
         })
     } catch (error) {
-        res.send(error)
+        res.status(400).send(error)
     }
 }
 
