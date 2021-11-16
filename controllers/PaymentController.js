@@ -5,7 +5,7 @@ const check_rule = access.check_rule
 const PG = require('../services/paginate')
 
 module.exports.index = async (req, res) => {
-    if(!(await check_rule('work_types_show',req.user.user_id))){
+    if(!(await check_rule('payments_show',req.user.user_id))){
         res.status(403).send({ message: 'Ruxsat yo\'q' })
     }
     try {
@@ -23,7 +23,7 @@ module.exports.index = async (req, res) => {
 
 module.exports.create = async (req, res) => {
     try {
-        if (!(await check_rule('work_types_add', req.user.user_id))) {
+        if (!(await check_rule('payments_add', req.user.user_id))) {
             res.status(403).send({ message: 'Ruxsat yo\'q' })
         }
         const validator = paymentValidator(req.body)
@@ -52,7 +52,7 @@ paymentValidator = (fields) => {
 
 module.exports.update = async (req, res) => {
     try {
-        if (!(await check_rule('work_types_edit', req.user.user_id))) {
+        if (!(await check_rule('payments_edit', req.user.user_id))) {
             res.status(403).send({ message: 'Ruxsat yo\'q' })
         }
         const payment = await Payment.findByPk(req.params.id)

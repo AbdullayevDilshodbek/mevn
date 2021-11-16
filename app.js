@@ -11,11 +11,13 @@ const user_routes = require('./routes/user.routes')
 const client_routes = require('./routes/client.routes')
 const work_type_routes = require('./routes/workType.routes')
 const work_list_routes = require('./routes/workList.routes')
+const payment_routes = require('./routes/payment.routes')
 
 app.use('/api/users', user_routes)
 app.use('/ap/clients',client_routes)
 app.use('/api/work_types',work_type_routes)
 app.use('/api/work_types',work_list_routes)
+app.use('/api/payments',payment_routes)
 
 // ------------ end ---- Api routes -------
 

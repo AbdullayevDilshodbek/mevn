@@ -75,7 +75,7 @@ workListValidator = (fields) => {
 
 module.exports.update = async (req, res) => {
     try {
-        if (!(await access.check_rule('users_edit', req.user.user_id))) {
+        if (!(await access.check_rule('work_list_edit', req.user.user_id))) {
             res.status(403).send({ message: 'Ruxsat yo\'q' })
         }
         const work_list = await WorkList.findByPk(req.params.id)
