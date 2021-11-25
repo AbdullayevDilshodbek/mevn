@@ -13,9 +13,19 @@ module.exports.index = async (req, res) => {
         const clients = await Client.findAll({
             attributes: {
                 exclude: []
-            }
+            },
+            order: [
+                ['id', 'DESC'],
+            ],
         });
-        req.data = clients
+        req.data = clients.map(el => {
+            if(el.type == "self"){
+                el.type = "Ichki"
+            } else {
+                el.type = "Tashqi"
+            }
+            return el
+        })
         res.status(200).send(PG.paginate(req))
     } catch (error) {
         res.status(400).send(error.message)
@@ -33,6 +43,8 @@ module.exports.create = async (req, res) => {
             res.status(400).send(message)
         }
         const client = await Client.create(req.body)
+        client.active = 1
+        client.type = client.type == 'self' ? 'Ichki' : 'Tashqi'
         res.status(201).send({
             message: "Yaratildi",
             object: client
@@ -59,9 +71,12 @@ module.exports.update = async (req, res) => {
         if(client.full_name == req.body.full_name){
             delete req.body.full_name
         }
-        await client.update(req.body)
+        await client.update({
+            full_name: req.body.full_name,
+            type: req.body.type
+        })
         res.send({
-            client,
+            object: client,
             message: "Ma'lumotlari yangilandi"
         })
     } catch (error) {
@@ -80,7 +95,7 @@ module.exports.change_active = async (req, res) => {
             active: !client.active
         })
         res.send({
-            client,
+            object: client,
             message: `${status}`
         })
     } catch (error) {

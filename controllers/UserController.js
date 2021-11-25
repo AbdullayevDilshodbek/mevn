@@ -16,7 +16,10 @@ module.exports.index = async (req, res) => {
         const users = await User.findAll({
             attributes: {
                 exclude: ['password']
-            }
+            },
+            order: [
+                ['id', 'DESC'],
+            ],
         });
         req.data = users
         res.status(200).send(PG.paginate(req))
@@ -40,14 +43,15 @@ module.exports.create = async (req, res) => {
         const user = await User.create({
             full_name,
             username,
-            password: hashPassword
+            password: hashPassword,
+            active: true
         })
         res.status(201).send({
             message: "Foydalanuvchi yaratildi",
             object: user
         })
     } catch (error) {
-        res.status(409).json(error.message)
+        res.status(409).json({error})
     }
 }
 
@@ -77,7 +81,7 @@ module.exports.update = async (req, res) => {
         }
         await user.update(req.body)
         res.send({
-            user,
+            object: await User.findByPk(req.params.id),
             message: "Foydalanuvchi ma'lumotlari yangilandi"
         })
     } catch (error) {
@@ -96,7 +100,7 @@ module.exports.change_active = async (req, res) => {
             active: !user.active
         })
         res.send({
-            user,
+            object: user,
             message: `Foydalanuvchi ${status}`
         })
     } catch (error) {

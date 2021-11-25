@@ -10,6 +10,7 @@ module.exports = (sequelize, DataTypes) => {
   };
   WorkType.init({
     title: DataTypes.STRING,
+    value: DataTypes.INTEGER,
     active: DataTypes.BOOLEAN
   }, {
     sequelize,
